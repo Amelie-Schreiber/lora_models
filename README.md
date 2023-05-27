@@ -66,8 +66,9 @@ Let's consider a simple example where we are dealing with 2-dimensional subspace
 
 Let's consider two $2 \times 4$ matrices $\Delta W_1$ and $\Delta W_2$ that represent these subspaces:
 
-$$\Delta W_1 = \begin{bmatrix} 1 & 2 & 3 & 4 \\ 5 & 6 & 7 & 8 \end{bmatrix}$$
-$$\Delta W_2 = \begin{bmatrix} -1 & -2 & -3 & -4 \\ -5 & -6 & -7 & -8 \end{bmatrix}$$
+$$\Delta W_1 = \begin{pmatrix} 1 & 2 & 3 & 4 \\ 5 & 6 & 7 & 8 \end{pmatrix}$$
+
+$$\Delta W_2 = \begin{pmatrix} -1 & -2 & -3 & -4 \\ -5 & -6 & -7 & -8 \end{pmatrix}$$
 
 The Plücker coordinates of these subspaces are given by the determinants of all $2 \times 2$ submatrices. For $\Delta W_1$, these are $(1 \times 6 - 2 \times 5, 1 \times 7 - 3 \times 5, 1 \times 8 - 4 \times 5, 2 \times 7 - 3 \times 6, 2 \times 8 - 4 \times 6, 3 \times 8 - 4 \times 7) = (-4, -8, -12, -6, -8, -4)$. Similarly, for $\Delta W_2$, the Plücker coordinates are $(1, 2, 3, 1, 2, 1)$.
 
