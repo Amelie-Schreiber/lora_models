@@ -3,9 +3,9 @@ Some ideas and code for LoRA models (Low Rank Adaptation)
 
 ## Another Approach to Merging
 
-Suppose we are are studying the update weight matrices $\Delta W_1^{(n)} = B_1^{(n)}A_1^{(n)}$ for layer `n`of a reference LoRA model (Low Rank Adaptation) named `lora1.safetensors` or just `lora1`. Suppose further we have a second LoRA named `lora2` (also stored as a .safetensors file) with update weight matrices 
+Suppose we are are studying the update weight matrices $\Delta W_1^{(n)} = B_1^{(n)}A_1^{(n)}$ for layer `n`of a reference LoRA model (Low Rank Adaptation) named `lora1.safetensors` or just `lora1`. Suppose further we have a second LoRA named `lora2` (also stored as a .safetensors file) with update weight matrices $\Delta W_2^{(n)} = B_2^{(n)}A_2^{(n)}$. Now, define a subspace similarity metric 
 
-$$\Delta W_2^{(n)} = B_2^{(n)}A_2^{(n)}$. Now, define a subspace similarity metric $\phi(\Delta W_i, \Delta W_j, k, l) = \frac{\left\|U_{\Delta W_i^{(n)}}^{(k)} {U_{\Delta W_j^{(n)}}^{(l)}}^T\right\|_F^2}{\min(k, l)}$$ 
+$$\phi(\Delta W_i, \Delta W_j, k, l) = \frac{\left\| \left|U_{\Delta W_i^{(n)}}^{(k)} {U_{\Delta W_j^{(n)}}^{(l)}}^T\right\| \right|_F^2}{\min(k, l)}$$ 
 
 that helps us measure how far apart two update weight matrices are in the. Now please explain how this related to points in the Grassmannian (or on the "Grassmann manifold"). Please explain how the Grassmannian is realized as a quotient space (a homogeneous space) in terms of orthogonal groups. Please also explain how we might use this to define and study the equivalence classes of matrices corresponding to the update weight matrices of the two LoRA models. Please also explain how we might use this to replace to update weight matrices of `lora2` with equivalent matrices. How will these new matrices compare in the subspace similarity metric $\phi(\Delta W_i, \Delta W_j, k, l)$ we defined? If we wish to merge the two LoRA models in some way, how can we use the theory and properties of the Grassmannian to do so?
 
