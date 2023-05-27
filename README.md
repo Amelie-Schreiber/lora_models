@@ -43,3 +43,48 @@ This method would give you a new set of weight matrices for `lora3` that represe
 However, keep in mind that this process might not always yield a meaningful or useful model, because the common subspace that minimizes the distance might not preserve the essential features that `lora1` and `lora2` have learned.
 
 Also note that this is a somewhat simplified approach and does not take into account the structure of the neural network models or the nature of the data they have been trained on. In practice, creating a merged model that performs well might involve more complex techniques, like transfer learning or knowledge distillation, and might require a careful examination of the models' architectures and training histories.
+
+## Yet Another Approach Using the Plücker Embedding of the Grassmannian Manifold
+
+The Plücker embedding is a map from the Grassmannian G(k, n) into the projective space P^(N-1), where N is the binomial coefficient "n choose k". The Plücker coordinates of a k-dimensional subspace V of n-dimensional space are defined as the wedge products of the vectors spanning V. If the vectors are the columns of a matrix, then the Plücker coordinates are the determinants of all kxk submatrices.
+
+Let's say that $\Delta W_1$ and $\Delta W_2$ are two matrices whose columns span the subspaces represented by points p1 and p2 in the Grassmannian. You want to find the midpoint of the geodesic connecting p1 and p2.
+
+The Plücker embedding represents each subspace (each matrix) as a point in projective space. In this space, the geodesic between p1 and p2 is a straight line. Therefore, the midpoint of the geodesic is simply the arithmetic mean of the Plücker coordinates of p1 and p2. 
+
+However, there's a caveat: The Plücker coordinates of a point in the Grassmannian satisfy certain relations called the Plücker relations, which are a consequence of the alternating property of the wedge product. The sum of two sets of Plücker coordinates might not satisfy these relations. Therefore, after computing the mean of the Plücker coordinates of p1 and p2, you need to project this point back onto the Grassmannian, i.e., find the point in the Grassmannian that is closest to the mean point under the Fubini-Study metric.
+
+This projection step is nontrivial. It requires solving an optimization problem that minimizes the distance from the mean point to the Grassmannian, subject to the Plücker relations. The result will be the Plücker coordinates of the midpoint of the geodesic.
+
+To find a matrix representation of this midpoint subspace, you would need to find a set of vectors whose wedge products give the Plücker coordinates of the midpoint. This is also a nontrivial problem, but in some cases it might be possible to solve it by using techniques from linear algebra or combinatorics.
+
+Keep in mind that this is a high-level description of the process, and the actual computations might be quite complex, especially for large values of k and n. This approach is more commonly used in theoretical studies than in practical computations. For practical purposes, other methods such as optimization on the Grassmannian might be more efficient.
+
+### Example
+
+Let's consider a simple example where we are dealing with 2-dimensional subspaces of a 4-dimensional space. This corresponds to the Grassmannian $G(2,4)$. The Plücker coordinates in this case are given by $2 \times 2$ determinants, and there are six Plücker coordinates for each point in $G(2,4)$.
+
+Let's consider two $2 \times 4$ matrices $\Delta W_1$ and $\Delta W_2$ that represent these subspaces:
+
+$$\Delta W_1 = \begin{bmatrix} 1 & 2 & 3 & 4 \\ 5 & 6 & 7 & 8 \end{bmatrix}$$
+$$\Delta W_2 = \begin{bmatrix} -1 & -2 & -3 & -4 \\ -5 & -6 & -7 & -8 \end{bmatrix}$$
+
+The Plücker coordinates of these subspaces are given by the determinants of all $2 \times 2$ submatrices. For $\Delta W_1$, these are $(1 \times 6 - 2 \times 5, 1 \times 7 - 3 \times 5, 1 \times 8 - 4 \times 5, 2 \times 7 - 3 \times 6, 2 \times 8 - 4 \times 6, 3 \times 8 - 4 \times 7) = (-4, -8, -12, -6, -8, -4)$. Similarly, for $\Delta W_2$, the Plücker coordinates are $(1, 2, 3, 1, 2, 1)$.
+
+The midpoint of the line segment in the Plücker space connecting these two points is simply the arithmetic mean of the two sets of Plücker coordinates. This gives $(-1.5, -3, -4.5, -2.5, -3, -1.5)$.
+
+However, as mentioned previously, this point might not satisfy the Plücker relations, which in this case are:
+
+\begin{align*}
+P_{12}P_{34} - P_{13}P_{24} + P_{14}P_{23} &= 0 \\
+P_{15}P_{26} - P_{16}P_{25} + P_{56}P_{12} &= 0 \\
+P_{25}P_{34} - P_{26}P_{35} + P_{56}P_{13} &= 0 \\
+P_{35}P_{12} - P_{36}P_{15} + P_{56}P_{14} &= 0 \\
+\end{align*}
+
+These equations represent the fact that the Plücker coordinates come from a 2-dimensional subspace of a 4-dimensional space. To find the point in $G(2,4)$ that is closest to the mean point under the Fubini-Study metric, you would need to solve an optimization problem that minimizes the distance from the mean point to $G(2,4)$, subject to these Plücker relations. This is a nontrivial problem that might require numerical methods or specialized algebraic techniques.
+
+Once you have the Plücker coordinates of the midpoint, you can find a matrix representation of the corresponding subspace by finding a set of vectors whose $2 \times 2$ determinants give these Plücker coordinates. Again, this is a nontrivial problem, but in some cases it might be possible to solve it by using techniques from linear algebra or combinatorics.
+
+Please note that this is a simplified example for illustrative purposes, and the actual computations in a real-world scenario could be much more complex.
+
