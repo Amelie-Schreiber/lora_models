@@ -1,6 +1,8 @@
 # lora_models
 Some ideas and code for LoRA models (Low Rank Adaptation)
 
+Don't take this repo too seriously, it's mostly just me playing with ChatGPT and trying to figure out how to use Grassmannians in an ML context. 
+
 ## Another Approach to Merging
 
 Suppose we are are studying the update weight matrices $\Delta W_1^{(n)} = B_1^{(n)}A_1^{(n)}$ for layer `n`of a reference LoRA model (Low Rank Adaptation) named `lora1.safetensors` or just `lora1`. Suppose further we have a second LoRA named `lora2` (also stored as a .safetensors file) with update weight matrices $\Delta W_2^{(n)} = B_2^{(n)}A_2^{(n)}$. Now, define a subspace similarity metric 
