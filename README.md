@@ -39,7 +39,7 @@ $$
 A_{\text{mean}}^{(n)} = \arg\min_{A \in Gr(i_r, N)} \sum_{r=1}^k d^2(A, U_{A_r^{(n)}}^{i_r})
 $$
 
-Similarly for $U_{B_1^{(n)}}^{j_1}$, $U_{B_2^{(n)}}^{j_2}$, ..., $U_{B_2^{(n)}}^{j_k}$ with $j_1 = j_2 = ... = j_k$, we can compute the Karcher mean for all of them. $j_r$ are all the same (r=1, ..., k)$
+Similarly for $U_{B_1^{(n)}}^{j_1}$, $U_{B_2^{(n)}}^{j_2}$, ..., $U_{B_2^{(n)}}^{j_k}$ with $j_1 = j_2 = ... = j_k$, we can compute the Karcher mean for all of them. So, choosing all of the $j_r$ to be the same (r=1, ..., k)$
 
 $$
 B_{\text{mean}}^{(n)} = \arg\min_{B \in Gr(j_r, N)} \sum_{r=1}^k d^2(B, U_{B_r^{(n)}}^{j_r})
