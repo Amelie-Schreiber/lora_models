@@ -33,4 +33,16 @@ where $d$ denotes the geodesic distance on the Grassmannian, and $Gr(d, N)$ is t
 
 Once we've computed $A_{\text{mean}}^{(n)}$ and $B_{\text{mean}}^{(n)}$, we can form an "average" update matrix $\Delta W_{\text{mean}}^{(n)} = B_{\text{mean}}^{(n)}A_{\text{mean}}^{(n)}$. This matrix cannot then just be added to the original weights of the $n$-th layer, allowing us to perform a kind of "averaged" low-rank adaptation that might perform well on both tasks, because it is not of the correct shape. However, it can be used to *learn* an average update matrix $\Delta ' W_{\text{mean}}^{(n)}$ that is of the correct shape. 
 
+It is also important to note, again, that this can be performed with multiple LoRA models at once, even if they are of different sizes. In particular, if we follow the methods in [LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685) and compute the matrices $U_{A_1^{(n)}}^{i_1}$, $U_{A_2^{(n)}}^{i_2}$, ..., $U_{A_k^{(n)}}^{i_k}$  with $i_1 = i_2 = ... = i_k$, we can compute the Karcher mean of the subspaces spanned by the first $i_1 = ... = i_k$ singular columns (or rows depending on your convention) of the decomposition (SVD) of $A_1^{(n)}$, $A_2^{(n)}$, ..., $A_k^{(n)}$. So assuming the $i_r$ are all the same (r=1, ..., k)$
+
+$$
+A_{\text{mean}}^{(n)} = \arg\min_{A \in Gr(i_r, N)} \sum_{r=1}^k d^2(U_{A_r^{(n)}}^{i_r})
+$$
+
+Similarly for $U_{B_1^{(n)}}^{j_1}$, $U_{B_2^{(n)}}^{j_2}$, ..., $U_{B_2^{(n)}}^{j_k}$ with $j_1 = j_2 = ... = j_k$, we can compute the Karcher mean for all of them. $j_r$ are all the same (r=1, ..., k)$
+
+$$
+B_{\text{mean}}^{(n)} = \arg\min_{B \in Gr(j_r, N)} \sum_{r=1}^k d^2(U_{B_r^{(n)}}^{i_r})
+$$
+
 This approach is not only interesting from a practical point of view, but also from a theoretical point of view. It draws on concepts from Riemannian geometry and manifold optimization, and it could provide new insights into the geometric structure of the space of all possible adaptations to a given model. It's a fascinating direction for further research, connecting deep learning, Riemannian geometry, and optimization on Grassmann manifolds.
