@@ -42,7 +42,7 @@ $$
 Similarly for $U_{B_1^{(n)}}^{j_1}$, $U_{B_2^{(n)}}^{j_2}$, ..., $U_{B_2^{(n)}}^{j_k}$ with $j_1 = j_2 = ... = j_k$, we can compute the Karcher mean for all of them. $j_r$ are all the same (r=1, ..., k)$
 
 $$
-B_{\text{mean}}^{(n)} = \arg\min_{B \in Gr(j_r, N)} \sum_{r=1}^k d^2(B, U_{B_r^{(n)}}^{i_r})
+B_{\text{mean}}^{(n)} = \arg\min_{B \in Gr(j_r, N)} \sum_{r=1}^k d^2(B, U_{B_r^{(n)}}^{j_r})
 $$
 
 This approach is not only interesting from a practical point of view, but also from a theoretical point of view. It draws on concepts from Riemannian geometry and manifold optimization, and it could provide new insights into the geometric structure of the space of all possible adaptations to a given model. It's a fascinating direction for further research, connecting deep learning, Riemannian geometry, and optimization on Grassmann manifolds.
