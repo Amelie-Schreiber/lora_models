@@ -24,7 +24,7 @@ To fully appreciate the metric, let's delineate its components:
 3. **Frobenius Norm and Matrix Multiplication:** 
 
 $$
-||U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}^T||_F^2
+{|| U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}^T ||}_F^2
 $$ 
 
 This segment of the metric quantifies the similarity between the two subspaces. The matrix $U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}^T$ is the matrix formed by the dot product of every pair of singular vectors from the two subspaces. The Frobenius norm is then computed for this matrix, which computes the square root of the sum of the absolute squares of its elements, and then squared. The Frobenius norm of the product of the singular vectors captures the sum of the squared cosine of the angles between the subspaces. Squaring the Frobenius norm emphasizes the contributions from the larger angles.
