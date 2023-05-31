@@ -27,7 +27,7 @@ $$
 \phi(\Delta W_1^{(n)}, \Delta W_2^{(n)}, i, j) = \frac{||U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}}^T||_F^2}{\min(i, j)}
 $$
 
-This segment of the metric quantifies the similarity between the two subspaces. The matrix $U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}^T$ is the matrix formed by the dot product of every pair of singular vectors from the two subspaces. The Frobenius norm is then computed for this matrix, which computes the square root of the sum of the absolute squares of its elements, and then squared. The Frobenius norm of the product of the singular vectors captures the sum of the squared cosine of the angles between the subspaces. Squaring the Frobenius norm emphasizes the contributions from the larger angles.
+This segment of the metric quantifies the similarity between the two subspaces. The matrix $U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}}^T$ is the matrix formed by the dot product of every pair of singular vectors from the two subspaces. The Frobenius norm is then computed for this matrix, which computes the square root of the sum of the absolute squares of its elements, and then squared. The Frobenius norm of the product of the singular vectors captures the sum of the squared cosine of the angles between the subspaces. Squaring the Frobenius norm emphasizes the contributions from the larger angles.
 
 4. **Normalization by** $\min(i, j)$: The Frobenius norm of the matrix product is then normalized by the minimum of $i$ and $j$. This step ensures that the metric is scale-invariant and doesn't grow with the dimensionality of the subspaces.
 
