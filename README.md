@@ -87,6 +87,6 @@ $$
 \Delta W_{\text{mean}}^{(n)} = \arg\min_{U \in Gr(j_r, N)} \sum_{r=1}^k d^2(U, U_{\Delta W_r^{(n)}}^{j_r})
 $$
 
-It is unclear which would be most meaningful or useful. Either way, we get a geometrically meaningful average of the weight matrices that could then be used as data to learn the average LoRA model. For LoRAs that are "close" in some sense, this should provide a better average to the collection of LoRAs than the arithmetic average. 
+It is unclear which would be most meaningful or useful. Either way, we get a geometrically meaningful average of the weight matrices that could then be used as data to learn the average LoRA model. For LoRAs that are "close" in some sense, this should provide a better average to the collection of LoRAs than the arithmetic average. Also, note, we don't necessarily need to choos the $j_r$ values to be maximal. So long as $j_1 = j_2 = \cdots = j_k$ we can compute the above Fréchet-Karcher means. 
 
 
