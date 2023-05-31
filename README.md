@@ -22,6 +22,7 @@ To fully appreciate the metric, let's delineate its components:
 2. **Subspaces** $U_{\Delta W_1^{(n)}}^{(i)}$ and $U_{\Delta W_2^{(n)}}^{(j)}$: The subspaces $U_{\Delta W_1^{(n)}}^{(i)}$ and $U_{\Delta W_2^{(n)}}^{(j)}$ refer to the subspaces spanned by the first $i$ and $j$ columns of $U_{\Delta W_1^{(n)}}$ and $U_{\Delta W_2^{(n)}}$ respectively. They signify the $i$- and $j$-dimensional spaces that encapsulate the most variance in the respective weight update matrices.
 
 3. **Frobenius Norm and Matrix Multiplication:** 
+
 $$
 ||U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}^T||_F^2
 $$ 
