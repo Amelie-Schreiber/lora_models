@@ -9,6 +9,34 @@ $$
 
 then this should provide a geometrically meaningful representation of the models that effectively distills them into a single model. However, since the Karcher means yield square orthonormal matrices, some additional deep learning procedure to obtain a model with the architecture of the original base model will be required. 
 
+## What is this subspace similarity metric $\phi$?
+
+In our effort to comprehend the intricate geometry of the parameter space in deep learning architectures, we us an innovative subspace similarity metric, denoted as $\phi$, which is designed to quantify the resemblance between subspaces defined by weight updates in deep neural networks. This metric was introduced in [LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685). This subspace similarity metric draws from the concept of subspace angles and exploits the mathematical properties of the Grassmann manifold -- a space embodying the structure of linear subspaces within a high-dimensional space.
+
+The inputs to the metric $\phi$ include two weight update matrices, $\Delta W_1^{(n)}$ and $\Delta W_2^{(n)}$, and two integers, $i$ and $j$. These integers represent the number of columns to consider from the corresponding singular vectors of the Singular Value Decomposition (SVD) of these weight update matrices. 
+
+To fully appreciate the metric, let's delineate its components:
+
+1. **Singular Value Decomposition (SVD):** The Singular Value Decomposition of a matrix $A$ is a factorization of the form $A = U\Sigma V^T$ where $U$ and $V$ are orthogonal matrices and $\Sigma$ is a diagonal matrix. In context of the weight matrices $\Delta W_1^{(n)}$ and $\Delta W_2^{(n)}$, we apply SVD to derive the orthogonal matrices $U_{\Delta W_1^{(n)}}$ and $U_{\Delta W_2^{(n)}}$. The columns of these matrices, the left singular vectors of the original matrices, form an orthonormal basis for the column space of the corresponding weight update matrices.
+
+2. **Subspaces $U_{\Delta W_1^{(n)}}^{(i)}$ and $U_{\Delta W_2^{(n)}}^{(j)}$:** The subspaces $U_{\Delta W_1^{(n)}}^{(i)}$ and $U_{\Delta W_2^{(n)}}^{(j)}$ refer to the subspaces spanned by the first $i$ and $j$ columns of $U_{\Delta W_1^{(n)}}$ and $U_{\Delta W_2^{(n)}}$ respectively. They signify the $i$- and $j$-dimensional spaces that encapsulate the most variance in the respective weight update matrices.
+
+3. **Frobenius Norm and Matrix Multiplication: $||U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}^T||_F^2$:** This segment of the metric quantifies the similarity between the two subspaces. The matrix $U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}^T$ is the matrix formed by the dot product of every pair of singular vectors from the two subspaces. The Frobenius norm is then computed for this matrix, which computes the square root of the sum of the absolute squares of its elements, and then squared. The Frobenius norm of the product of the singular vectors captures the sum of the squared cosine of the angles between the subspaces. Squaring the Frobenius norm emphasizes the contributions from the larger angles.
+
+4. **Normalization by $\min(i, j)$:** The Frobenius norm of the matrix product is then normalized by the minimum of $i$ and $j$. This step ensures that the metric is scale-invariant and doesn't grow with the dimensionality of the subspaces.
+
+The subspace similarity metric $\phi(\Delta W_1^{(n)},
+
+\Delta W_2^{(n)}, i, j)$ thereby provides a rigorous, mathematically sound measure of the similarity between the subspaces spanned by the weight updates in a deep neural network. Higher values of $\phi$ imply that the weight updates are moving in similar directions in the high-dimensional space, suggesting that the learning process is exploring similar regions of the parameter space. Conversely, lower values of $\phi$ suggest that the learning process is exploring different regions of the parameter space with the two different weight update matrices.
+
+The relevance of the Grassmann manifold in this context arises from the fact that the space of all subspaces of a given dimension in a high-dimensional space forms a Grassmann manifold. The metric $\phi$ essentially measures distances on this manifold, providing a natural measure of similarity between subspaces. 
+
+By analyzing the trajectory of weight updates in the space of all possible subspaces (i.e., the Grassmann manifold), we gain a geometric understanding of the learning dynamics of deep neural networks. This perspective can provide new insights into the complex optimization landscapes associated with these models and can potentially inform new training strategies, regularizations, or architectures to improve learning performance.
+
+In the context of Low Rank Adaptation (LoRA), the matrices $U_{\Delta W_1^{(n)}}$ and $U_{\Delta W_2^{(n)}}$ can be interpreted as update weight matrices. The subspace similarity metric described above can be used to analyze the similarity between different update matrices, providing insight into the training dynamics of the model. However, it's important to note that this approach is not limited to LoRA and can be applied to any neural network model.
+
+In summary, our research leverages the mathematical properties of the Grassmann manifold to develop a novel subspace similarity metric for understanding the learning dynamics of deep neural networks. By studying the subspaces spanned by weight updates during training, we gain a geometric perspective on the high-dimensional optimization landscapes navigated by these powerful models.
+
 ## Why?
 
 Well, since the Grassmannian and Grassmannian manifold learning is used in image analysis, and LoRA models are seeing a surge in applications to Stable Diffusion and similar text-to-image and multimodal vision models, the Karcher mean of two models seems to make sense. Also, the computation of the Karcher mean of two (or more) models doesn't appear to be very computationally expensive, as all computations in the above, for two relatively large LoRA models was carried out on a small personal laptop. The real extent of the applications to ensembe learning and knowledge distillation are still TBD. 
