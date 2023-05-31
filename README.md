@@ -19,15 +19,18 @@ To fully appreciate the metric, let's delineate its components:
 
 1. **Singular Value Decomposition (SVD):** The Singular Value Decomposition of a matrix $A$ is a factorization of the form $A = U\Sigma V^T$ where $U$ and $V$ are orthogonal matrices and $\Sigma$ is a diagonal matrix. In context of the weight matrices $\Delta W_1^{(n)}$ and $\Delta W_2^{(n)}$, we apply SVD to derive the orthogonal matrices $U_{\Delta W_1^{(n)}}$ and $U_{\Delta W_2^{(n)}}$. The columns of these matrices, the left singular vectors of the original matrices, form an orthonormal basis for the column space of the corresponding weight update matrices.
 
-2. **Subspaces $U_{\Delta W_1^{(n)}}^{(i)}$ and $U_{\Delta W_2^{(n)}}^{(j)}$:** The subspaces $U_{\Delta W_1^{(n)}}^{(i)}$ and $U_{\Delta W_2^{(n)}}^{(j)}$ refer to the subspaces spanned by the first $i$ and $j$ columns of $U_{\Delta W_1^{(n)}}$ and $U_{\Delta W_2^{(n)}}$ respectively. They signify the $i$- and $j$-dimensional spaces that encapsulate the most variance in the respective weight update matrices.
+2. **Subspaces** $U_{\Delta W_1^{(n)}}^{(i)}$ and $U_{\Delta W_2^{(n)}}^{(j)}$: The subspaces $U_{\Delta W_1^{(n)}}^{(i)}$ and $U_{\Delta W_2^{(n)}}^{(j)}$ refer to the subspaces spanned by the first $i$ and $j$ columns of $U_{\Delta W_1^{(n)}}$ and $U_{\Delta W_2^{(n)}}$ respectively. They signify the $i$- and $j$-dimensional spaces that encapsulate the most variance in the respective weight update matrices.
 
-3. **Frobenius Norm and Matrix Multiplication:** $||U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}^T||_F^2$: This segment of the metric quantifies the similarity between the two subspaces. The matrix $U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}^T$ is the matrix formed by the dot product of every pair of singular vectors from the two subspaces. The Frobenius norm is then computed for this matrix, which computes the square root of the sum of the absolute squares of its elements, and then squared. The Frobenius norm of the product of the singular vectors captures the sum of the squared cosine of the angles between the subspaces. Squaring the Frobenius norm emphasizes the contributions from the larger angles.
+3. **Frobenius Norm and Matrix Multiplication:** 
+$$
+||U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}^T||_F^2
+$$ 
+
+This segment of the metric quantifies the similarity between the two subspaces. The matrix $U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}^T$ is the matrix formed by the dot product of every pair of singular vectors from the two subspaces. The Frobenius norm is then computed for this matrix, which computes the square root of the sum of the absolute squares of its elements, and then squared. The Frobenius norm of the product of the singular vectors captures the sum of the squared cosine of the angles between the subspaces. Squaring the Frobenius norm emphasizes the contributions from the larger angles.
 
 4. **Normalization by** $\min(i, j)$: The Frobenius norm of the matrix product is then normalized by the minimum of $i$ and $j$. This step ensures that the metric is scale-invariant and doesn't grow with the dimensionality of the subspaces.
 
-The subspace similarity metric $\phi(\Delta W_1^{(n)},
-
-\Delta W_2^{(n)}, i, j)$ thereby provides a rigorous, mathematically sound measure of the similarity between the subspaces spanned by the weight updates in a deep neural network. Higher values of $\phi$ imply that the weight updates are moving in similar directions in the high-dimensional space, suggesting that the learning process is exploring similar regions of the parameter space. Conversely, lower values of $\phi$ suggest that the learning process is exploring different regions of the parameter space with the two different weight update matrices.
+The subspace similarity metric $\phi(\Delta W_1^{(n)},\Delta W_2^{(n)}, i, j)$ thereby provides a rigorous, mathematically sound measure of the similarity between the subspaces spanned by the weight updates in a deep neural network. Higher values of $\phi$ imply that the weight updates are moving in similar directions in the high-dimensional space, suggesting that the learning process is exploring similar regions of the parameter space. Conversely, lower values of $\phi$ suggest that the learning process is exploring different regions of the parameter space with the two different weight update matrices.
 
 The relevance of the Grassmann manifold in this context arises from the fact that the space of all subspaces of a given dimension in a high-dimensional space forms a Grassmann manifold. The metric $\phi$ essentially measures distances on this manifold, providing a natural measure of similarity between subspaces. 
 
