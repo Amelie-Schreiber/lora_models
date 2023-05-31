@@ -6,7 +6,7 @@ This is just me playing around with ChatGPT to try to figure out how to compute 
 The code in [merging_loras](https://github.com/Amelie-Schreiber/lora_models/blob/main/merging_loras.ipynb) notebook shows how to compute the Fréchet mean (a.k.a. the Karcher mean) of the weight matrices of two LoRA models (Low Rank Adaptation models). This treats the weight matrices as points on the Grassmannian and computes their (Karcher) mean *in the Grassmannian manifold*. This effectively gives a representation of the average of the two that preserves geometric information about the two models. This could be useful for ensemble learning or knowledge distillation. Note, this notebook will work for any two LoRA models that have update matrices $\Delta W_1^{(n)} = B_1^{(n)}A_1^{(n)}$, and $\Delta W_2^{(n)} = B_2^{(n)}A_2^{(n)}$ that have the same middle dimension (here `n` denotes the layer). In other words, if $A_1^{(n)} \in \mathbb{R}^{r \times n}$ then we must have $A_2^{(n)} \in \mathbb{R}^{r \times n}$, and similarly for $B_1^{(n)}$ and $B_2^{(n)}$. If the middle dimension are not the same (and if the rank of $A_i^{(n)}$ and $B_i^{(n)}$ are not full) the Karcher mean computation will not work. Moreover, for the scalars $\alpha$ (corresponding to the suffix `.alpha` in the two `.safetensors` files) in the network, we simply compute the arithemtic mean. Note, this can be generalize to multiple LoRA models, and if the models are close together in the Grassmannian in the subspace similarity metric 
 
 $$
-\phi(\Delta W_1^{(n)}, \Delta W_2^{(n)}, i, j) = \frac{\left|\left|U_{\Delta W_1^{(n)}}^{(i)} \left(U_{\Delta W_2^{(n)}}^{(j)}\right^T\right|\right|_F^2}{\min(i, j)}
+\phi(\Delta W_1^{(n)}, \Delta W_2^{(n)}, i, j) = \frac{\left|\left|U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}}^T\right|\right|_F^2}{\min(i, j)}
 $$
 
 then this should provide a geometrically meaningful representation of the models that effectively distills them into a single model. However, since the Karcher means yield square orthonormal matrices, some additional deep learning procedure to obtain a model with the architecture of the original base model will be required. 
@@ -26,7 +26,7 @@ To fully appreciate the metric, let's delineate its components:
 3. **Frobenius Norm and Matrix Multiplication:** 
 
 $$
-\phi(\Delta W_1^{(n)}, \Delta W_2^{(n)}, i, j) = \frac{\left|\left|U_{\Delta W_1^{(n)}}^{(i)} \left{U_{\Delta W_2^{(n)}}^{(j)}}\right^T\right|\right|_F^2}{\min(i, j)}
+\phi(\Delta W_1^{(n)}, \Delta W_2^{(n)}, i, j) = \frac{\left|\left|U_{\Delta W_1^{(n)}}^{(i)} \left({U_{\Delta W_2^{(n)}}^{(j)}}\right)^T\right|\right|_F^2}{\min(i, j)}
 $$
 
 This segment of the metric quantifies the similarity between the two subspaces. The matrix $U_{\Delta W_1^{(n)}}^{(i)} {U_{\Delta W_2^{(n)}}^{(j)}}^T$ is the matrix formed by the dot product of every pair of singular vectors from the two subspaces. The Frobenius norm is then computed for this matrix, which computes the square root of the sum of the absolute squares of its elements, and then squared. The Frobenius norm of the product of the singular vectors captures the sum of the squared cosine of the angles between the subspaces. Squaring the Frobenius norm emphasizes the contributions from the larger angles.
