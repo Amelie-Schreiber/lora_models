@@ -80,3 +80,13 @@ B_{\text{mean}}^{(n)} = \arg\min_{B \in Gr(j_r, N)} \sum_{r=1}^k d^2(B, U_{B_r^{
 $$
 
 This approach is not only interesting from a practical point of view, but also from a theoretical point of view. It draws on concepts from Riemannian geometry and manifold optimization, and it could provide new insights into the geometric structure of the space of all possible adaptations to a given model. It's a fascinating direction for further research, connecting deep learning, Riemannian geometry, and optimization on Grassmann manifolds.
+
+We can also take the Fréchet-Karcher mean of the matrices $U_{\Delta W_1^{(n)}}^{(i)}$, $U_{\Delta W_2^{(n)}}^{(i)}$, ..., $U_{\Delta W_k^{(n)}}^{(i)}$ by computing 
+
+$$
+\Delat W_{\text{mean}}^{(n)} = \arg\min_{B \in Gr(j_r, N)} \sum_{r=1}^k d^2(U, U_{W_r^{(n)}}^{j_r})
+$$
+
+It is unclear which would be most meaningful or useful. Either way, we get a geometrically meaningful average of the weight matrices that could then be used as data to learn the average LoRA model. For LoRAs that are "close" in some sense, this should provide a better average to the collection of LoRAs than the arithmetic average. 
+
+
