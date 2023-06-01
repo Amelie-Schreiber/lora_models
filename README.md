@@ -99,7 +99,14 @@ $$
 \phi(\Delta W_p^{(n)}, \Delta W_q^{(n)}, i, j) = \frac{\left|\left|U_{\Delta W_p^{(n)}}^{(i)} \left({U_{\Delta W_q^{(n)}}^{(j)}}\right)^T\right|\right|_F^2}{\min(i, j)}
 $$
 
+## Using $\phi(\Delta W_p^{(n)}, \Delta W_q^{(n)}, i, j)$ for Persistent Homology
 
+Another form of clustering that is mathematically quite fancy is "persistent homology". We can create a distance matrix from the pairwise distances:
 
+$$
+\phi(\Delta W_p^{(n)}, \Delta W_q^{(n)}, i, j) = \frac{\left|\left|U_{\Delta W_p^{(n)}}^{(i)} \left({U_{\Delta W_q^{(n)}}^{(j)}}\right)^T\right|\right|_F^2}{\min(i, j)}
+$$
+
+and using this distance matrix we can compute a "filtered simplicial complex" and an associated "persistence diagram" that not only allows us to cluster update weight matrices per layer of the LoRA models, but it also gives us a topological structure to the clusters (the filtered simplicial complex). This is very similar to running a DBSCAN analysis on the distance matrix $\phi(\Delta W_p^{(n)}, \Delta W_q^{(n)}, i, j)$ for a range of scale parameters $\epsilon$. This could then be used to find models that cluster together and we could then compute the Fréchet-Karcher mean of them to get a distilled representation or average of the LoRA models. 
 
 
