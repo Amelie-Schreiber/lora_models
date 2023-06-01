@@ -96,7 +96,7 @@ Grassmannian kernel are (positive definite) kernels $K: \mathbf{Gr}(k, n) \times
 We can then compute the Fréchet-Karcher means of the clusters to obtain a condensed representation of all of the models, sometimes drastically reducing the number of LoRA models needed to represent the same concepts and knowledge. The amount of reduction will of course depend on the number of clusters. Doing this layer-wise, that is, clustering update weight matrices $\Delta W_i^{(n)}$ for each layer `n` introduces some choices and assumptions that need to be made though. We may need to assume that we have the same number of clusters per layer `n` to reduce the problem complexity, and choosing which combinations of cluster means to use to represent and average LoRA could be tricky and may require keeping track of which of the original models falls into which cluster. If we are lucky though, models will not have layers that fall in different clusters. Geometrically this would make sense, but the answer will require some empirical testing on large collections of models. Understanding how LoRA models cluster using Grassmannian kernel methods and the Fréchet-Karcher mean could help us better understand how LoRA models represent information. Note, the kernel methods give us an alternative but still geometrically meaningful alternative to the subspace similarity metric
 
 $$
-\phi(\Delta W_1^{(n)}, \Delta W_2^{(n)}, i, j) = \frac{\left|\left|U_{\Delta W_1^{(n)}}^{(i)} \left({U_{\Delta W_2^{(n)}}^{(j)}}\right)^T\right|\right|_F^2}{\min(i, j)}
+\phi(\Delta W_p^{(n)}, \Delta W_q^{(n)}, i, j) = \frac{\left|\left|U_{\Delta W_p^{(n)}}^{(i)} \left({U_{\Delta W_q^{(n)}}^{(j)}}\right)^T\right|\right|_F^2}{\min(i, j)}
 $$
 
 
