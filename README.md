@@ -3,13 +3,13 @@ Some ideas and code for LoRA models (Low Rank Adaptation)
 
 This is just me playing around with ChatGPT to try to figure out how to compute the Fréchet-Karcher means of LoRA models' update weight matrices. 
 
-The code in [merging_loras](https://github.com/Amelie-Schreiber/lora_models/blob/main/merging_loras.ipynb) notebook shows how to compute the Fréchet mean (a.k.a. the Karcher mean) of the weight matrices of two LoRA models (Low Rank Adaptation models). This treats the weight matrices as points on the Grassmannian and computes their (Karcher) mean *in the Grassmannian manifold*. This effectively gives a representation of the average of the two that preserves geometric information about the two models. This could be useful for ensemble learning or knowledge distillation. Note, this notebook will work for any two LoRA models that have update matrices $\Delta W_1^{(n)} = B_1^{(n)}A_1^{(n)}$, and $\Delta W_2^{(n)} = B_2^{(n)}A_2^{(n)}$ that have the same middle dimension (here `n` denotes the layer). In other words, if $A_1^{(n)} \in \mathbb{R}^{r \times n}$ then we must have $A_2^{(n)} \in \mathbb{R}^{r \times n}$, and similarly for $B_1^{(n)}$ and $B_2^{(n)}$. If the middle dimension are not the same (and if the rank of $A_i^{(n)}$ and $B_i^{(n)}$ are not full) the Karcher mean computation will not work. Moreover, for the scalars $\alpha$ (corresponding to the suffix `.alpha` in the two `.safetensors` files) in the network, we simply compute the arithemtic mean. Note, this can be generalize to multiple LoRA models, and if the models are close together in the Grassmannian in the subspace similarity metric 
+The code in [merging_loras](https://github.com/Amelie-Schreiber/lora_models/blob/main/merging_loras.ipynb) notebook shows how to compute the Fréchet mean (a.k.a. the Karcher mean) of the weight matrices of two LoRA models (Low Rank Adaptation models). This treats the weight matrices as points on the Grassmannian and computes their (Karcher) mean *in the Grassmannian manifold*. This effectively gives a representation of the average of the two that preserves geometric information about the two models. Note, this notebook will work for any two LoRA models that have update matrices $\Delta W_1^{(n)} = B_1^{(n)}A_1^{(n)}$, and $\Delta W_2^{(n)} = B_2^{(n)}A_2^{(n)}$ that have the same middle dimension (here `n` denotes the layer). In other words, if $A_1^{(n)} \in \mathbb{R}^{r \times n}$ then we must have $A_2^{(n)} \in \mathbb{R}^{r \times n}$, and similarly for $B_1^{(n)}$ and $B_2^{(n)}$. If the middle dimension are not the same (and if the rank of $A_i^{(n)}$ and $B_i^{(n)}$ are not full) the Karcher mean computation will not work. Moreover, for the scalars $\alpha$ (corresponding to the suffix `.alpha` in the two `.safetensors` files) in the network, we simply compute the arithemtic mean. Note, this can be generalized to multiple LoRA models, and if the models are close together in the Grassmannian in the subspace similarity metric 
 
 $$
 \phi(\Delta W_1^{(n)}, \Delta W_2^{(n)}, i, j) = \frac{\left|\left|U_{\Delta W_1^{(n)}}^{(i)} \left({U_{\Delta W_2^{(n)}}^{(j)}}\right)^T\right|\right|_F^2}{\min(i, j)}
 $$
 
-then this should provide a geometrically meaningful representation of the models that effectively distills them into a single model. However, since the Karcher means yield square orthonormal matrices, some additional deep learning procedure to obtain a model with the architecture of the original base model will be required. 
+then this should provide a geometrically meaningful representation of the models that effectively distills them into a single model. However, since the Karcher means yield square orthonormal matrices, some additional deep learning procedure to obtain a model with the architecture of the original base model will be required. For example, we could train a LoRA, including the above subspace similarity metric in the loss function, to compare the corresponding point on the Grassmann manifold to the average computed by the above process. If the model learns a point that does not converge to the Karcher mean, then the model is penalized. This way, we learn a LoRA model that corresponds to the Karcher mean of the LoRA models we want to merge. We might also use something like Grassmannian kernels to do this. 
 
 ## What is this subspace similarity metric $\phi$?
 
@@ -45,13 +45,11 @@ In summary, our research leverages the mathematical properties of the Grassmann 
 
 ## Why?
 
-Well, since the Grassmannian and Grassmannian manifold learning is used in image analysis, and LoRA models are seeing a surge in applications to Stable Diffusion and similar text-to-image and multimodal vision models, the Karcher mean of two models seems to make sense. Also, the computation of the Karcher mean of two (or more) models doesn't appear to be very computationally expensive, as all computations in the above, for two relatively large LoRA models was carried out on a small personal laptop. The real extent of the applications to ensembe learning and knowledge distillation are still TBD. 
+Well, since the Grassmannian and Grassmannian manifold learning is used in image analysis, and LoRA models are seeing a surge in applications to Stable Diffusion and similar text-to-image and multimodal vision models, the Karcher mean of two models seems to make sense. Also, the computation of the Karcher mean of two (or more) models doesn't appear to be very computationally expensive, as all computations in the above, for two relatively large LoRA models was carried out on a small personal laptop. 
 
 In the Low-Rank Adaptation (LoRA) setting, the update matrices $\Delta W_1^{(n)}$ and $\Delta W_2^{(n)}$ are decomposed into $A$ and $B$ matrices, $\Delta W_1^{(n)} = B_1^{(n)}A_1^{(n)}$ and $\Delta W_2^{(n)} = B_2^{(n)}A_2^{(n)}$.
 
-The $A_i^{(n)}$ and $B_i^{(n)}$ matrices can be viewed as residing in different subspaces of the original layer's weight space. They capture different aspects of the task-specific adaptation: $A_i^{(n)}$ captures the "direction" of the adaptation in the weight space, while $B_i^{(n)}$ captures how much the weights are adjusted along this direction.
-
-If we compute the Karcher mean of the $A$ matrices and the $B$ matrices separately, we're essentially finding the "average" direction and "average" adjustment magnitude across the two tasks. This could be beneficial in a multitask learning setting, where we want to find a "compromise" adaptation that performs well on multiple tasks.
+The $A_i^{(n)}$ and $B_i^{(n)}$ matrices can be viewed as residing in different subspaces of the original layer's weight space. They capture different aspects of the task-specific adaptation. If we compute the Karcher mean of the $A$ matrices and the $B$ matrices separately, we're essentially finding the "average" direction and "average" adjustment magnitude across the two tasks. This could be beneficial in a multitask learning setting, where we want to find a average adaptation that performs well on multiple tasks.
 
 From a mathematical perspective, let's denote the Karcher mean of the $A$ matrices as $A_{\text{mean}}^{(n)}$, and the Karcher mean of the $B$ matrices as $B_{\text{mean}}^{(n)}$. They can be computed by solving the following optimization problems:
 
@@ -87,26 +85,4 @@ $$
 \Delta W_{\text{mean}}^{(n)} = \arg\min_{U \in Gr(j_r, N)} \sum_{r=1}^k d^2(U, U_{\Delta W_r^{(n)}}^{j_r})
 $$
 
-It is unclear which would be most meaningful or useful. Either way, we get a geometrically meaningful average of the weight matrices that could then be used as data to learn the average LoRA model. For LoRAs that are "close" in some sense, this should provide a better average to the collection of LoRAs than the arithmetic average. Also, note, we don't necessarily need to choos the $j_r$ values to be maximal. So long as $j_1 = j_2 = \cdots = j_k$ we can compute the above Fréchet-Karcher means. 
-
-## What Are Grassmannian Kernels and Why Are They Useful?
-
-Grassmannian kernel are (positive definite) kernels $K: \mathbf{Gr}(k, n) \times \mathbf{Gr}(k, n) \to \mathbb{R}$ that provide us with a kind of similarity measure (similar to an inner product) that allows use to measure the similarity of two points in the Grassmann manifold $\mathbf{Gr}(k, n)$. If we treat update weight matrices $\Delta W_i^{(n)}$ of LoRA models as points on the Grassmannian manifold, we can consider various kernels to measure thier similarity and cluster them. This can aid in merging or averaging LoRA models, in regularization of LoRA models, in ensemble learning, and in knowledge distillation. If we have a very large collection of LoRA models and we want to cluster them in order to better merge them we can use Grassmannian kernel methods to do so. 
-
-We can then compute the Fréchet-Karcher means of the clusters to obtain a condensed representation of all of the models, sometimes drastically reducing the number of LoRA models needed to represent the same concepts and knowledge. The amount of reduction will of course depend on the number of clusters. Doing this layer-wise, that is, clustering update weight matrices $\Delta W_i^{(n)}$ for each layer `n` introduces some choices and assumptions that need to be made though. We may need to assume that we have the same number of clusters per layer `n` to reduce the problem complexity, and choosing which combinations of cluster means to use to represent and average LoRA could be tricky and may require keeping track of which of the original models falls into which cluster. If we are lucky though, models will not have layers that fall in different clusters. Geometrically this would make sense, but the answer will require some empirical testing on large collections of models. Understanding how LoRA models cluster using Grassmannian kernel methods and the Fréchet-Karcher mean could help us better understand how LoRA models represent information. Note, the kernel methods give us an alternative but still geometrically meaningful alternative to the subspace similarity metric
-
-$$
-\phi(\Delta W_p^{(n)}, \Delta W_q^{(n)}, i, j) = \frac{\left|\left|U_{\Delta W_p^{(n)}}^{(i)} \left({U_{\Delta W_q^{(n)}}^{(j)}}\right)^T\right|\right|_F^2}{\min(i, j)}
-$$
-
-## Using $\phi(\Delta W_p^{(n)}, \Delta W_q^{(n)}, i, j)$ for Persistent Homology
-
-Another form of clustering that is mathematically quite fancy is "persistent homology". We can create a distance matrix from the pairwise distances:
-
-$$
-\phi(\Delta W_p^{(n)}, \Delta W_q^{(n)}, i, j) = \frac{\left|\left|U_{\Delta W_p^{(n)}}^{(i)} \left({U_{\Delta W_q^{(n)}}^{(j)}}\right)^T\right|\right|_F^2}{\min(i, j)}
-$$
-
-and using this distance matrix we can compute a "filtered simplicial complex" and an associated "persistence diagram" that not only allows us to cluster update weight matrices per layer of the LoRA models, but it also gives us a topological structure to the clusters (the filtered simplicial complex). This is very similar to running a DBSCAN analysis on the distance matrix $\phi(\Delta W_p^{(n)}, \Delta W_q^{(n)}, i, j)$ for a range of scale parameters $\epsilon$. This could then be used to find models that cluster together and we could then compute the Fréchet-Karcher mean of them to get a distilled representation or average of the LoRA models. 
-
-
+It is unclear which would be most meaningful or useful. Either way, we get a geometrically meaningful average of the weight matrices that could then be used as data to learn the average LoRA model. For LoRAs that are "close" in some sense, this should provide a better average to the collection of LoRAs than the arithmetic average. Also, note, we don't necessarily need to choose the $j_r$ values to be maximal. So long as $j_1 = j_2 = \cdots = j_k$ we can compute the above Fréchet-Karcher means. 
